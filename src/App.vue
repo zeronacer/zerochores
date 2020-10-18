@@ -1,28 +1,83 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-container>
+      <Chore v-for="chore in choresData" :key="chore.id" v-bind="chore"></Chore>
+    </b-container>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Chore from "./components/Chore";
+import firebase from "../src/firebaseConfig";
+const db = firebase.firestore();
 
 export default {
-  name: 'App',
+  data() {
+    return {
+      name: "",
+      choresData: [],
+      usersData: [],
+    };
+  },
   components: {
-    HelloWorld
-  }
-}
+    Chore,
+  },
+  methods: {
+    // tutorial: https://blog.logrocket.com/how-to-build-and-deploy-a-vue-js-crud-app-with-cloud-firestore-and-firebase/
+    createChore(name) {
+      if (name != "") {
+        db.collection("chores")
+          .add({ name: name })
+          .then(() => {
+            this.readChores();
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+          });
+        this.name = "";
+      }
+    },
+    readChores() {
+      this.choresData = [];
+      db.collection("chores")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.choresData.push({
+              id: doc.id,
+              name: doc.data().name,
+              last_done: doc.data().last_done,
+              image: doc.data().image,
+              repeat: doc.data().repeat,
+            });
+          });
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+    readUsers() {
+      this.usersData = [];
+      db.collection("users")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.usersData.push({
+              id: doc.id,
+              name: doc.data().name,
+            });
+          });
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+  },
+  mounted() {
+    this.readChores();
+    this.readUsers();
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>

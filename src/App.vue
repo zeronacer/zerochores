@@ -1,7 +1,13 @@
 <template>
   <div id="app">
     <b-container>
-      <Chore v-for="chore in choresData" :key="chore.id" v-bind="chore"></Chore>
+      <b-row>
+        <Chore
+          v-for="chore in choresData"
+          :key="chore.id"
+          v-bind="chore"
+        ></Chore>
+      </b-row>
     </b-container>
   </div>
 </template>

@@ -1,24 +1,26 @@
 <template>
-  <b-card
-    :title="name"
-    :img-src="image"
-    class="mb-2"
-    header=" "
-    :header-bg-variant="timeStatus"
-  >
-    <b-card-text>
-      <b-row>
-        <b-col> Zuletzt: {{ last_done_date }} </b-col>
-        <b-col v-if="nextExecutionInDays >= 0">
-          Nächstes Mal in: {{ nextExecutionInDays }} Tag/en
-        </b-col>
-        <b-col v-else> Verspätet um {{ nextExecutionInDays }} Tag/e </b-col>
-      </b-row>
-    </b-card-text>
-    <b-button block variant="success" size="lg" v-on:click="updateChore"
-      ><b-icon icon="check"></b-icon>Erledigt</b-button
+  <b-col cols="12" sm="6">
+    <b-card
+      :title="name"
+      :img-src="image"
+      class="mb-2"
+      header=" "
+      :header-bg-variant="timeStatus"
     >
-  </b-card>
+      <b-card-text>
+        <b-row>
+          <b-col> Zuletzt: {{ last_done_date }} </b-col>
+          <b-col v-if="nextExecutionInDays >= 0">
+            Nächstes Mal in: {{ nextExecutionInDays }} Tag/en
+          </b-col>
+          <b-col v-else> Verspätet um {{ nextExecutionInDays }} Tag/e </b-col>
+        </b-row>
+      </b-card-text>
+      <b-button block variant="success" size="lg" v-on:click="updateChore"
+        ><b-icon icon="check"></b-icon>Erledigt</b-button
+      >
+    </b-card>
+  </b-col>
 </template>
 
 <script>
